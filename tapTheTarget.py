@@ -6,6 +6,9 @@ from kivy.core.window import Window
 from kivy.clock import Clock
 from random import randint
 
+SCORE_REQ = 50
+TIME_LIMIT = 60
+
 class GameWidget(Widget):
     def __init__(self, **kwarg):
         super().__init__()
@@ -28,7 +31,8 @@ class GameWidget(Widget):
         
         self.game_over_label = Label(text="", 
                                  font_size="50",
-                                 pos=(Window.width / 2 - 80, Window.height / 2))
+                                 pos=(Window.width / 2 - 80, Window.height / 2 + 80),
+                                 opacity = 0)
         self.add_widget(self.game_over_label)
         
         self.target = Button(size=(50,50), background_color=(1,1,1,1), opacity=0)
@@ -49,11 +53,15 @@ class GameWidget(Widget):
         self.score = 0
         self.time_passed = 0
         self.gameOn = True
+        
         self.start_button.disabled = True
         self.start_button.opacity = 0
+        self.game_over_label.opacity = 0
         
         self.score_label.opacity = 1
+        self.score_label.test = "Score: 0"
         self.time_label.opacity = 1
+        self.time_label.text = "Time: 0"
         self.target.opacity = 1
         self.target.disabled = False
         self.timer_event = Clock.schedule_interval(self.increment_timer, 1)
@@ -76,7 +84,7 @@ class GameWidget(Widget):
         self.time_passed += 1
         self.time_label.text = "Time: " + str(self.time_passed)
         
-        if self.time_passed >= 60:
+        if self.time_passed >= TIME_LIMIT:
             self.gameOver()
             
     def gameOver(self):
@@ -84,10 +92,13 @@ class GameWidget(Widget):
         self.gameOn = False
         self.target.disabled = True
         self.target.opacity = 0
-        if self.score >= 50:
+        if self.score >= SCORE_REQ:
             self.game_over_label.text = "You win!"
         else:
             self.game_over_label.text = "You lost!"
+        self.game_over_label.opacity = 1
+        self.start_button.disabled = False
+        self.start_button.opacity = 1
         
 class TapTheTarget(App):
     def build(self):
