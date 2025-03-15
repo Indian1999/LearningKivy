@@ -9,16 +9,22 @@ class MyGridLayout(GridLayout):
     def __init__(self, **kwargs):
         super(MyGridLayout, self).__init__(**kwargs)
         
-        self.cols = 2
-        self.add_widget(Label(text="Name"))
+        self.cols = 1
+        
+        self.top_grid = GridLayout()
+        self.top_grid.cols = 2
+        
+        self.top_grid.add_widget(Label(text="Name"))
         self.name = TextInput(multiline=False)
-        self.add_widget(self.name)
-        self.add_widget(Label(text="Age"))
+        self.top_grid.add_widget(self.name)
+        self.top_grid.add_widget(Label(text="Age"))
         self.age = TextInput(multiline=False)
-        self.add_widget(self.age)
-        self.add_widget(Label(text="Email"))
+        self.top_grid.add_widget(self.age)
+        self.top_grid.add_widget(Label(text="Email"))
         self.email = TextInput(multiline=False)
-        self.add_widget(self.email)
+        self.top_grid.add_widget(self.email)
+        
+        self.add_widget(self.top_grid)
         
         self.submit = Button(text="Submit")
         self.submit.bind(on_press = self.press)
@@ -28,7 +34,7 @@ class MyGridLayout(GridLayout):
         self.add_widget(self.output_label)
     
     def press(self, instance):
-        output = "Thank you! We have saved your informations.\n"
+        output = "Thank you! We have saved your information.\n"
         output += "Name: " + self.name.text + "\n"
         output += "Age: " + self.age.text + "\n"
         output += "E-mail: " + self.email.text
